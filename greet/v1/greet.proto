@@ -4,14 +4,14 @@ package greet.v1;
 
 option go_package = "example/gen/greet/v1;greetv1";
 
+service GreetService {
+    rpc Greet(GreetRequest) returns (GreetResponse) {}
+}
+
 message GreetRequest {
     string name = 1;
 }
 
 message GreetResponse {
     string greeting = 1;
-}
-
-service GreetService {
-    rpc Greet(GreetRequest) returns (GreetResponse) {}
 }
