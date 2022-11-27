@@ -4,6 +4,20 @@
 
 # コマンド
 
+## サーバー実行コマンド
+
+```
+make server
+```
+
+## 実行コマンド
+
+```
+make client
+```
+
+または
+
 ```
 curl \
     --header "Content-Type: application/json" \
