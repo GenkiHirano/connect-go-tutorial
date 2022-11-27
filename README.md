@@ -1,1 +1,3 @@
-# connect-go-tutorial
+# 目的
+
+- connect-go を公式チュートリアルを通して、理解を深める。
