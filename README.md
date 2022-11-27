@@ -4,9 +4,18 @@
 
 # コマンド
 
-```cli
+```
 curl \
     --header "Content-Type: application/json" \
     --data '{"name": "Gopherくん"}' \
     http://localhost:8080/greet.v1.GreetService/Greet
+```
+
+または
+
+```
+grpcurl \
+    -protoset <(buf build -o -) -plaintext \
+    -d '{"name": "Gopherくん"}' \
+    localhost:8080 greet.v1.GreetService/Greet
 ```
