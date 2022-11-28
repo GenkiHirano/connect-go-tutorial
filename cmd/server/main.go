@@ -35,4 +35,12 @@ func main() {
 		// h2cを使うことで、TLSなしでHTTP/2を提供できるようにする
 		h2c.NewHandler(mux, &http2.Server{}),
 	)
+
+	// api := http.NewServeMux()
+	// api.Handle(greetv1connect.NewGreetServiceHandler(&greetServer{}))
+
+	// mux := http.NewServeMux()
+	// mux.Handle("/", newHTMLHandler())
+	// mux.Handle("/grpc/", http.StripPrefix("/grpc", api))
+	// http.ListenAndServe(":http", mux)
 }
