@@ -16,6 +16,12 @@ make server
 make client
 ```
 
+## linter コマンド
+
+```
+make lint
+```
+
 または
 
 ```
