@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"log"
+	"errors"
+	"fmt"
 	"net/http"
 
 	greetv1 "example/gen/greet/v1"
@@ -14,15 +15,17 @@ import (
 func main() {
 	client := greetv1connect.NewGreetServiceClient(
 		http.DefaultClient,
-		"http://localhost:8080",
+		"https://api.acme.com",
 	)
-	res, err := client.Greet(
+	_, err := client.Greet(
 		context.Background(),
-		connect.NewRequest(&greetv1.GreetRequest{Name: "Jane"}),
+		connect.NewRequest(&greetv1.GreetRequest{}),
 	)
 	if err != nil {
-		log.Println(err)
-		return
+		fmt.Println(connect.CodeOf(err))
+		if connectErr := new(connect.Error); errors.As(err, &connectErr) {
+			fmt.Println(connectErr.Message())
+			fmt.Println(connectErr.Details())
+		}
 	}
-	log.Println(res.Msg.Greeting)
 }
