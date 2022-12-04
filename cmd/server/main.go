@@ -2,14 +2,18 @@ package main
 
 import (
 	"context"
+	"errors"
 	"example/gen/greet/v1/greetv1connect"
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/bufbuild/connect-go"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	"google.golang.org/protobuf/types/known/durationpb"
 
 	greetv1 "example/gen/greet/v1"
 )
@@ -42,6 +46,14 @@ func (s *GreetServer) Greet(ctx context.Context, req *connect.Request[greetv1.Gr
 // 	}), nil
 // }
 
+// Connectヘッダー (HTTPヘッダー)
+// func (s *GreetServer) Greet(ctx context.Context, req *connect.Request[greetv1.GreetRequest]) (*connect.Response[greetv1.GreetResponse], error) {
+// 	fmt.Println(req.Header().Get("Acme-Tenant-Id"))
+// 	res := connect.NewResponse(&greetv1.GreetResponse{})
+// 	res.Header().Set("Greet-Version", "v1")
+// 	return res, nil
+// }
+
 func main() {
 	greeter := &GreetServer{}
 	mux := http.NewServeMux()
@@ -52,4 +64,19 @@ func main() {
 		// h2cを使うことで、TLSなしでHTTP/2を提供できるようにする
 		h2c.NewHandler(mux, &http2.Server{}),
 	)
+}
+
+
+func newTransientError() error {
+	err := connect.NewError(
+		connect.CodeUnavailable,
+		errors.New("overloaded: back off and retry"),
+	)
+	retryInfo := &errdetails.RetryInfo{
+		RetryDelay: durationpb.New(10*time.Second),
+	}
+	if detail, detailErr := connect.NewErrorDetail(retryInfo); detailErr == nil {
+		err.AddDetail(detail)
+	}
+	return err
 }
