@@ -48,10 +48,17 @@ func (s *GreetServer) Greet(ctx context.Context, req *connect.Request[greetv1.Gr
 
 // Connectヘッダー (HTTPヘッダー)
 // func (s *GreetServer) Greet(ctx context.Context, req *connect.Request[greetv1.GreetRequest]) (*connect.Response[greetv1.GreetResponse], error) {
-// 	fmt.Println(req.Header().Get("Acme-Tenant-Id"))
-// 	res := connect.NewResponse(&greetv1.GreetResponse{})
-// 	res.Header().Set("Greet-Version", "v1")
-// 	return res, nil
+// 	err := connect.NewError(connect.CodeUnknown,errors.New("oh no!"),)
+// 	err.Meta().Set("Greet-Version", "v1")
+// 	return nil, err
+// }
+
+// func call() {
+// 	_, err := greetv1connect.NewGreetServiceClient(http.DefaultClient,"https://api.acme.com",
+// 	).Greet(context.Background(),connect.NewRequest(&greetv1.GreetRequest{}),)
+// 	if connectErr := new(connect.Error); errors.As(err, &connectErr) {
+// 		fmt.Println(err.Meta().Get("Greet-Version"))
+// 	}
 // }
 
 func main() {
