@@ -61,6 +61,18 @@ func (s *GreetServer) Greet(ctx context.Context, req *connect.Request[greetv1.Gr
 // 	}
 // }
 
+// インターセプタ設定
+func newInterCeptors() connect.Option {
+	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
+		return connect.UnaryFunc(func(ctx context.Context, req connect.AnyRequest) (connect.AnyResponse, error) {
+			// ここでヘッダをセットするなど色々処理を書ける
+			req.Header().Set("hoge", "fuga")
+			return next(ctx, req)
+		})
+	}
+	return connect.WithInterceptors(connect.UnaryInterceptorFunc(interceptor))
+}
+
 func main() {
 	greeter := &GreetServer{}
 	mux := http.NewServeMux()
