@@ -76,7 +76,8 @@ func newInterCeptors() connect.Option {
 func main() {
 	greeter := &GreetServer{}
 	mux := http.NewServeMux()
-	path, handler := greetv1connect.NewGreetServiceHandler(greeter)
+	interceptor := newInterCeptors()
+	path, handler := greetv1connect.NewGreetServiceHandler(greeter, interceptor)
 	mux.Handle(path, handler)
 	http.ListenAndServe(
 		"localhost:8080",
